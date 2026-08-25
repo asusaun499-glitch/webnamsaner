@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="th" class="dark h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEXT-GEN ENTERPRISE AI: Presentation 2026</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- GSAP 3 & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Chart.js for Interactive Data Visualization -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/4.4.1/chart.umd.js"></script>
+
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Kanit', 'sans-serif'],
+            thai: ['Kanit', 'sans-serif'],
+          },
+          colors: {
+            obsidian: '#07090E',
+            midnight: '#0F172A',
+            electric: {
+              400: '#38BDF8',
+              500: '#00F0FF',
+              600: '#0284C7',
+            },
+            violet: {
+              400: '#A78BFA',
+              500: '#8B5CF6',
+              600: '#7C3AED',
+            },
+            glass: {
+              100: 'rgba(255, 255, 255, 0.05)',
+              200: 'rgba(255, 255, 255, 0.1)',
+              300: 'rgba(255, 255, 255, 0.15)',
+              border: 'rgba(255, 255, 255, 0.12)',
+            }
+          },
+          backgroundImage: {
+            'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+            'glass-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
+          },
+          boxShadow: {
+            'glow-cyan': '0 0 30px rgba(0, 240, 255, 0.25)',
+            'glow-violet': '0 0 30px rgba(139, 92, 246, 0.25)',
+            'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom CSS Overrides & Utilities */
+    body {
+      background-color: #07090E;
+      color: #F8FAFC;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Noise Texture Overlay */
+    .bg-noise {
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+    }
+
+    /* Glassmorphism card */
+    .glass-panel {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.015) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    .glass-panel-glow {
+      position: relative;
+    }
+    .glass-panel-glow::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.4), rgba(139, 92, 246, 0.1), transparent);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 240, 255, 0.3);
+      border-radius: 3px;
+    }
+
+    /* Custom Glow Follower Cursor */
+    .custom-cursor {
+      pointer-events: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(0, 240, 255, 0.5);
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background-color 0.2s;
+      z-index: 9999;
+    }
+    .custom-cursor-dot {
+      pointer-events: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #00F0FF;
+      transform: translate(-50%, -50%);
+      z-index: 10000;
+      box-shadow: 0 0 10px #00F0FF;
+    }
+
+    /* Text Reveal Masking */
+    .text-mask-container {
+      overflow: hidden;
+      display: inline-block;
+    }
+
+    /* Glowing Text Effect */
+    .text-glow {
+      text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+    }
+    .text-glow-violet {
+      text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+    }
+
+    /* Presentation Slide Active/Inactive States */
+    .slide-deck-item {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5rem 6rem;
+      transition: none;
+    }
+
+    @media (max-width: 1024px) {
+      .slide-deck-item {
+        padding: 4rem 2rem;
+      }
+    }
+    @media (max-width: 640px) {
+      .slide-deck-item {
+        padding: 3.5rem 1.25rem;
+      }
+    }
+
+    .slide-deck-item.active-slide {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    /* Grid Line Background Overlay */
+    .bg-grid-lines {
+      background-size: 50px 50px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+
+    /* Light Sweep Animation */
+    .light-sweep {
+      position: relative;
+      overflow: hidden;
+    }
+    .light-sweep::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+      transform: skewX(-20deg);
+    }
+    .light-sweep.sweeping::after {
+      animation: sweep 1.5s ease-in-out;
+    }
+    @keyframes sweep {
+      0% { left: -100%; }
+      100% { left: 200%; }
+    }
+  </style>
+</head>
+<body class="h-full w-full font-sans antialiased bg-obsidian text-slate-100 select-none overflow-hidden">
+
+  <!-- Ambient Background Dynamic Canvas -->
+  <div class="fixed inset-0 pointer-events-none z-0">
+    <div class="absolute inset-0 bg-noise z-10"></div>
+    <div class="absolute inset-0 bg-grid-lines z-0 opacity-40"></div>
+    
+    <!-- Floating Ambient Light Orbs -->
+    <div id="orb-cyan" class="absolute top-1/4 left-1/5 w-[500px] h-[500px] rounded-full bg-electric-500/10 blur-[130px] transition-transform duration-1000 ease-out"></div>
+    <div id="orb-violet" class="absolute bottom-1/4 right-1/5 w-[600px] h-[600px] rounded-full bg-violet-600/10 blur-[150px] transition-transform duration-1000 ease-out"></div>
+    <div id="orb-center" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] rounded-full bg-blue-600/10 blur-[100px]"></div>
+  </div>
+
+  <!-- Custom Glow Follower Cursor -->
+  <div id="custom-cursor" class="custom-cursor hidden md:block"></div>
+  <div id="custom-cursor-dot" class="custom-cursor-dot hidden md:block"></div>
+
+  <!-- ================================================================= -->
+  <!-- CINEMATIC GSAP INTRO OVERLAY                                     -->
+  <!-- ================================================================= -->
+  <div id="intro-overlay" class="fixed inset-0 z-[9000] bg-obsidian flex flex-col items-center justify-center overflow-hidden">
+    <!-- Atmospheric Ambient Glow -->
+    <div id="intro-glow" class="absolute w-[600px] h-[600px] rounded-full bg-radial from-electric-500/20 via-violet-600/10 to-transparent blur-[140px] opacity-0 scale-50"></div>
+    
+    <!-- Background Grid Effect -->
+    <div id="intro-grid" class="absolute inset-0 bg-grid-lines opacity-0 transition-opacity duration-1000"></div>
+
+    <!-- Central Content Container -->
+    <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+      
+      <!-- Brand Logo Badge -->
+      <div id="intro-logo" class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-glass-100 border border-glass-border mb-8 opacity-0 scale-75 blur-md shadow-glow-cyan">
+        <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-electric-500 to-violet-600 flex items-center justify-center text-obsidian font-bold text-sm">
+          <i class="fa-solid fa-cube"></i>
+        </div>
+        <span class="text-xs font-semibold tracking-widest text-electric-400 uppercase">NEXUS STRATEGY 2026</span>
+      </div>
+
+      <!-- Small Category Tag Reveal -->
+      <div class="overflow-hidden mb-3">
+        <div id="intro-tag" class="text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-violet-400 translate-y-full opacity-0">
+          EXECUTIVE PRESENTATION &bull; SPECIAL BRIEFING
+        </div>
+      </div>
+
+      <!-- Giant Title Reveal (Masked Lines) -->
+      <div class="space-y-1 my-4">
+        <div class="overflow-hidden py-1">
+          <h1 id="intro-title-1" class="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white translate-y-[120px] opacity-0">
+            THE FUTURE OF
+          </h1>
+        </div>
+        <div class="overflow-hidden py-1">
+          <h1 id="intro-title-2" class="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight bg-gradient-to-r from-electric-500 via-blue-400 to-violet-500 bg-clip-text text-transparent translate-y-[120px] opacity-0">
+            ENTERPRISE AI
+          </h1>
+        </div>
+      </div>
+
+      <!-- Subtitle Reveal -->
+      <div class="overflow-hidden mt-6">
+        <p id="intro-subtitle" class="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto font-thai font-light translate-y-full opacity-0">
+          ยุทธศาสตร์การขับเคลื่อนองค์กรด้วย Autonomous Agents และข้อมูลอัจฉริยะ
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Skip Button -->
+    <button id="skip-intro-btn" class="absolute bottom-8 right-8 z-20 px-4 py-2 rounded-full glass-panel text-xs text-slate-400 hover:text-white transition-all duration-300 flex items-center gap-2 border border-white/10 hover:border-electric-500/50">
+      <span>กดเพื่อข้าม</span>
+      <i class="fa-solid fa-forward text-[10px]"></i>
+    </button>
+
+    <!-- Transition Reveal Curtain Screens -->
+    <div id="intro-curtain-top" class="absolute top-0 left-0 w-full h-1/2 bg-obsidian border-b border-electric-500/20 z-30 pointer-events-none"></div>
+    <div id="intro-curtain-bottom" class="absolute bottom-0 left-0 w-full h-1/2 bg-obsidian border-t border-electric-500/20 z-30 pointer-events-none"></div>
+  </div>
+
+  <!-- ================================================================= -->
+  <!-- MAIN PRESENTATION APP INTERFACE                                   -->
+  <!-- ================================================================= -->
+  <div id="app-viewport" class="relative w-full h-full flex flex-col justify-between overflow-hidden opacity-0 z-10">
+
+    <!-- Top Navigation Header -->
+    <header class="relative z-50 h-20 px-6 sm:px-12 flex items-center justify-between border-b border-white/5 bg-obsidian/40 backdrop-blur-xl">
+      <!-- Left: Logo & Subject Title -->
+      <div class="flex items-center gap-4">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-electric-500 to-violet-600 flex items-center justify-center text-obsidian font-bold shadow-glow-cyan">
+          <i class="fa-solid fa-bolt text-lg"></i>
+        </div>
+        <div>
+          <h2 class="text-sm font-bold tracking-wide text-white uppercase flex items-center gap-2">
+            <span>NEXUS AI 2026</span>
+            <span class="px-2 py-0.5 text-[10px] rounded-md bg-electric-500/10 text-electric-400 border border-electric-500/30 font-mono">KEYNOTE</span>
+          </h2>
+          <p id="header-slide-name" class="text-xs text-slate-400 font-thai truncate max-w-[200px] sm:max-w-xs">
+            01 / Cover Slide
+          </p>
+        </div>
+      </div>
+
+      <!-- Center: Presentation Clock & Timer -->
+      <div class="hidden md:flex items-center gap-3 px-4 py-1.5 rounded-full glass-panel text-xs text-slate-300 border border-white/10 font-mono">
+        <i class="fa-regular fa-clock text-electric-400"></i>
+        <span id="presentation-timer">00:00</span>
+        <span class="text-slate-600">|</span>
+        <span class="text-slate-400">LIVE DECK</span>
+      </div>
+
+      <!-- Right: Action Control Tools -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Audio Sound Effects Toggle -->
+        <button id="audio-toggle-btn" title="เปิด/ปิด เสียงเอฟเฟกต์" class="w-10 h-10 rounded-xl glass-panel flex items-center justify-center text-slate-300 hover:text-electric-400 hover:border-electric-500/40 transition-all">
+          <i class="fa-solid fa-volume-high text-sm"></i>
+        </button>
+
+        <!-- Speaker Notes Drawer Button -->
+        <button id="speaker-notes-btn" title="Speaker Notes (สำหรับผู้พูด)" class="w-10 h-10 rounded-xl glass-panel flex items-center justify-center text-slate-300 hover:text-electric-400 hover:border-electric-500/40 transition-all">
+          <i class="fa-solid fa-note-sticky text-sm"></i>
+        </button>
+
+        <!-- Overview Slide Grid Modal Button -->
+        <button id="overview-grid-btn" title="Slide Overview (ดูสไลด์ทั้งหมด)" class="w-10 h-10 rounded-xl glass-panel flex items-center justify-center text-slate-300 hover:text-electric-400 hover:border-electric-500/40 transition-all">
+          <i class="fa-solid fa-border-all text-sm"></i>
+        </button>
+
+        <!-- Fullscreen Presentation Mode Button -->
+        <button id="fullscreen-btn" title="Presentation Mode (เต็มจอ)" class="w-10 h-10 rounded-xl glass-panel flex items-center justify-center text-slate-300 hover:text-electric-400 hover:border-electric-500/40 transition-all">
+          <i class="fa-solid fa-expand text-sm"></i>
+        </button>
+
+        <!-- Replay Intro Button -->
+        <button id="replay-intro-btn" title="เล่น Intro อีกครั้ง" class="w-10 h-10 rounded-xl glass-panel flex items-center justify-center text-slate-300 hover:text-electric-400 hover:border-electric-500/40 transition-all">
+          <i class="fa-solid fa-rotate text-sm"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- ================================================================= -->
+    <!-- PRESENTATION STAGE & SLIDES DECK                                  -->
+    <!-- ================================================================= -->
+    <main id="presentation-stage" class="relative flex-1 w-full h-full overflow-hidden">
+
+      <!-- SLIDE 1: COVER SLIDE -->
+      <section class="slide-deck-item active-slide" data-slide-index="0" data-title="01 / Cover Slide">
+        <div class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <!-- Left Column Content -->
+          <div class="lg:col-span-7 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-electric-500/10 border border-electric-500/30 text-electric-400 text-xs font-semibold tracking-wide">
+              <span class="w-2 h-2 rounded-full bg-electric-400 animate-pulse"></span>
+              EXECUTIVE BRIEFING 2026
+            </div>
+            
+            <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight">
+              NEXT-GEN AI & <br/>
+              <span class="bg-gradient-to-r from-electric-500 via-cyan-300 to-violet-500 bg-clip-text text-transparent">ENTERPRISE AUTOMATION</span>
+            </h1>
+
+            <p class="text-lg sm:text-xl text-slate-300 font-thai font-light leading-relaxed max-w-xl">
+              ยุทธศาสตร์การปรับตัวและสร้างความได้เปรียบทางธุรกิจด้วย Autonomous Agents, Deep Analytics และสถาปัตยกรรมข้อมูลอัจฉริยะ
+            </p>
+
+            <div class="pt-6 border-t border-white/10 grid grid-cols-2 sm:grid-cols-3 gap-6 font-thai">
+              <div>
+                <p class="text-xs text-slate-400 uppercase tracking-wider font-sans">ผู้นำเสนอ</p>
+                <p class="text-sm font-semibold text-white mt-1">ดร. พงศกร วิวัฒนกุล</p>
+                <p class="text-xs text-slate-400">Chief Innovation Officer</p>
+              </div>
+              <div>
+                <p class="text-xs text-slate-400 uppercase tracking-wider font-sans">วันที่นำเสนอ</p>
+                <p class="text-sm font-semibold text-white mt-1">25 สิงหาคม 2026</p>
+                <p class="text-xs text-slate-400">Bangkok, Thailand</p>
+              </div>
+              <div class="hidden sm:block">
+                <p class="text-xs text-slate-400 uppercase tracking-wider font-sans">องค์กร</p>
+                <p class="text-sm font-semibold text-white mt-1">NEXUS AI LAB</p>
+                <p class="text-xs text-slate-400">Enterprise Solutions</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column 3D Visual Graphic Component -->
+          <div class="lg:col-span-5 flex justify-center">
+            <div class="relative w-72 h-72 sm:w-96 sm:h-96 flex items-center justify-center">
+              <!-- Outer Rotating Ring -->
+              <div class="absolute inset-0 rounded-full border border-electric-500/30 animate-[spin_20s_linear_infinite]"></div>
+              <div class="absolute inset-4 rounded-full border border-dashed border-violet-500/40 animate-[spin_15s_linear_infinite_reverse]"></div>
+              
+              <!-- Floating Glass Visual Cards -->
+              <div class="absolute top-4 left-0 glass-panel p-4 rounded-2xl shadow-glow-cyan border border-white/20 transform -rotate-6 hover:rotate-0 transition-transform duration-500">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-electric-500/20 text-electric-400 flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-brain"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs text-slate-400 font-sans">AI Efficiency</p>
+                    <p class="text-lg font-bold text-white font-mono">+340%</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="absolute bottom-6 right-0 glass-panel p-4 rounded-2xl shadow-glow-violet border border-white/20 transform rotate-6 hover:rotate-0 transition-transform duration-500">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-violet-500/20 text-violet-400 flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-microchip"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs text-slate-400 font-sans">Autonomous Agents</p>
+                    <p class="text-lg font-bold text-white font-mono">99.8%</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Core Glowing Sphere -->
+              <div class="w-36 h-36 rounded-full bg-gradient-to-tr from-electric-500 via-cyan-400 to-violet-600 shadow-[0_0_80px_rgba(0,240,255,0.6)] flex items-center justify-center relative">
+                <i class="fa-solid fa-network-wired text-4xl text-obsidian"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- SLIDE 2: AGENDA (สารบัญหัวข้อนำเสนอ) -->
+      <section class="slide-deck-item" data-slide-index="1" data-title="02 / Executive Agenda">
+        <div class="max-w-6xl mx-auto w-full space-y-8">
+          <div>
+            <span class="text-xs font-semibold tracking-widest text-electric-400 uppercase font-sans">AGENDA & STRUCTURE</span>
+            <h2 class="text-3xl sm:text-5xl font-extrabold text-white mt-1">หัวข้อการนำเสนอหลัก</h2>
+            <p class="text-slate-400 font-thai text-sm sm:text-base mt-2">ภาพรวมเนื้อหา 4 ส่วนสำคัญเพื่อนำพาองค์กรสู่ความเป็นผู้นำในยุคดิจิทัล</p>
+          </div>
+
+          <!-- Agenda Interactive Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <div class="glass-panel p-6 rounded-3xl border border-white/10 hover:border-electric-500/50 transition-all duration-300 group cursor-pointer">
+              <div class="flex items-start justify-between">
+                <span class="text-3xl font-black font-mono text-electric-400/40 group-hover:text-electric-400 transition-colors">01</span>
+                <div class="w-10 h-10 rounded-xl bg-electric-500/10 text-electric-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-chart-line"></i>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-white mt-4 font-thai">ที่มาและความท้าทายในปัจจุบัน</h3>
+              <p class="text-sm text-slate-400 font-thai mt-2">วิเคราะห์ปัญหาความล่าช้า ข้อมูลไร้ระเบียบ และต้นทุนการดำเนินงานที่สูงขึ้นก่อนการใช้ AI</p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl border border-white/10 hover:border-violet-500/50 transition-all duration-300 group cursor-pointer">
+              <div class="flex items-start justify-between">
+                <span class="text-3xl font-black font-mono text-violet-400/40 group-hover:text-violet-400 transition-colors">02</span>
+                <div class="w-10 h-10 rounded-xl bg-violet-500/10 text-violet-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-lightbulb"></i>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-white mt-4 font-thai">ข้อมูลเชิงลึก & เทรนด์อุตสาหกรรม 2026</h3>
+              <p class="text-sm text-slate-400 font-thai mt-2"> Key Market Insights จากการสำรวจองค์กรชั้นนำ และอัตราการเติบโตของ Autonomous Workflows</p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl border border-white/10 hover:border-electric-500/50 transition-all duration-300 group cursor-pointer">
+              <div class="flex items-start justify-between">
+                <span class="text-3xl font-black font-mono text-electric-400/40 group-hover:text-electric-400 transition-colors">03</span>
+                <div class="w-10 h-10 rounded-xl bg-electric-500/10 text-electric-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-layer-group"></i>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-white mt-4 font-thai">สถาปัตยกรรม & โมเดลการดำเนินงาน</h3>
+              <p class="text-sm text-slate-400 font-thai mt-2">โครงสร้าง Multi-Agent Ecosystem การรักษาความปลอดภัยข้อมูล และการเชื่อมต่อระบบเดิม</p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl border border-white/10 hover:border-violet-500/50 transition-all duration-300 group cursor-pointer">
+              <div class="flex items-start justify-between">
+                <span class="text-3xl font-black font-mono text-violet-400/40 group-hover:text-violet-400 transition-colors">04</span>
+                <div class="w-10 h-10 rounded-xl bg-violet-500/10 text-violet-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-trophy"></i>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-white mt-4 font-thai">ผลลัพธ์ ROI & แผนการปรับใช้</h3>
+              <p class="text-sm text-slate-400 font-thai mt-2">สรุปตัวเลขความคุ้มค่า ตัววัดผล KPI และ Roadmap การปรับใช้จริงภายใน 90 วัน</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+
+      <!-- SLIDE 3: PROBLEM / BACKGROUND (ปัญหาและความท้าทาย) -->
+      <section class="slide-deck-item" data-slide-index="2" data-title="03 / Problem & Background">
+        <div class="max-w-6xl mx-auto w-full space-y-8">
+          <div>
+            <span class="text-xs font-semibold tracking-widest text-rose-400 uppercase font-sans">PAIN POINTS & CHALLENGES</span>
+            <h2 class="text-3xl sm:text-5xl font-extrabold text-white mt-1">คอขวดและข้อจำกัดขององค์กรยุคเดิม</h2>
+            <p class="text-slate-400 font-thai text-sm sm:text-base mt-2">ทำไมระบบเดิมจึงไม่ตอบโจทย์การแข่งขันในยุคที่ข้อมูลหมุนเวียนอย่างรวดเร็ว</p>
+          </div>
+
+          <!-- Problem Highlight Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 font-thai">
+            
+            <div class="glass-panel p-6 rounded-3xl border border-rose-500/20 bg-rose-500/5 relative overflow-hidden">
+              <div class="text-4xl font-black font-mono text-rose-400 mb-4">72%</div>
+              <h3 class="text-lg font-bold text-white">Data Silos & Fragmented Systems</h3>
+              <p class="text-sm text-slate-300 mt-2 leading-relaxed">
+                ข้อมูลกระจัดกระจายอยู่ในต่างระบบ ทำให้ทีมงานต้องใช้เวลานานในการดึงและสรุปข้อมูลเพื่อการตัดสินใจ
+              </p>
+              <div class="mt-4 pt-4 border-t border-rose-500/20 text-xs text-rose-300 flex items-center gap-2">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span>ทำให้การตัดสินใจช้าลง 3 เท่า</span>
+              </div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl border border-amber-500/20 bg-amber-500/5 relative overflow-hidden">
+              <div class="text-4xl font-black font-mono text-amber-400 mb-4">4.2 ชม./วัน</div>
+              <h3 class="text-lg font-bold text-white">Repetitive Manual Work</h3>
+              <p class="text-sm text-slate-300 mt-2 leading-relaxed">
+                พนักงานสูญเสียเวลาส่วนใหญ่ไปกับงานเอกสาร การคีย์ข้อมูล และการตรวจสอบความถูกต้องด้วยตนเอง
+              </p>
+              <div class="mt-4 pt-4 border-t border-amber-500/20 text-xs text-amber-300 flex items-center gap-2">
+                <i class="fa-solid fa-clock"></i>
+                <span>สูญเสียมูลค่าทางธุรกิจปีละหลายล้าน</span>
+              </div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl border border-purple-500/20 bg-purple-500/5 relative overflow-hidden">
+              <div class="text-4xl font-black font-mono text-purple-400 mb-4">65%</div>
+              <h3 class="text-lg font-bold text-white">Lack of Real-time Insight</h3>
+              <p class="text-sm text-slate-300 mt-2 leading-relaxed">
+                รายงานสรุปมักเป็นข้อมูลย้อนหลัง ไม่สามารถคาดการณ์พฤติกรรมลูกค้าหรือสภาวะตลาดแบบ Real-time ได้
+              </p>
+              <div class="mt-4 pt-4 border-t border-purple-500/20 text-xs text-purple-300 flex items-center gap-2">
+                <i class="fa-solid fa-bolt"></i>
+                <span>สูญเสียโอกาสในการสร้างรายได้ใหม่</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+
+      <!-- SLIDE 4: KEY INSIGHTS (ข้อมูลเชิงลึก 2026) -->
+      <section class="slide-deck-item" data-slide-index="3" data-title="04 / Key Insights">
+        <div class="max-w-6xl mx-auto w-full space-y-8">
+          <div>
+            <span class="text-xs font-semibold tracking-widest text-electric-400 uppercase font-sans">MARKET DRIVERS 2026</span>
+            <h2 class="text-3xl sm:text-5xl font-extrabold text-white mt-1">ข้อมูลเชิงลึกที่คุณไม่ควรมองข้าม</h2>
+            <p class="text-slate-400 font-thai text-sm sm:text-base mt-2">ผลการวิเคราะห์จากองค์กรระดับ Global และอัตราเร่งของการปรับใช้ AI</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            
+            <!-- Big Highlight Card -->
+            <div class="md:col-span-5 glass-panel p-8 rounded-3xl border border-electric-500/30 bg-gradient-to-br from-electric-500/10 to-transparent">
+              <span class="px-3 py-1 rounded-full bg-electric-500/20 text-electric-400 text-xs font-mono font-bold">INSIGHT #1</span>
+              <div class="text-6xl sm:text-7xl font-black font-mono text-white text-glow mt-4">3.8X</div>
+              <h3 class="text-2xl font-bold text-white font-thai mt-2">อัตราการเติบโตของ Autonomous Workflows</h3>
+              <p class="text-sm text-slate-300 font-thai mt-4 leading-relaxed">
+                องค์กรที่นำ Autonomous Agents เข้ามาช่วยงาน สามารถขยายขีดความสามารถในการให้บริการได้เพิ่มขึ้นเกือบ 4 เท่า โดยไม่ต้องเพิ่มอัตรากำลังคน
+              </p>
+            </div>
+
+            <!-- Side Cards Grid -->
+            <div class="md:col-span-7 space-y-4 font-thai">
+              
+              <div class="glass-panel p-5 rounded-2xl flex items-center gap-6 border border-white/10 hover:border-violet-500/40 transition-all">
+                <div class="text-4xl font-black font-mono text-violet-400 min-w-[100px]">85%</div>
+                <div>
+                  <h4 class="text-lg font-bold text-white">ความเร็วในการตัดสินใจ (Decision Speed)</h4>
+                  <p class="text-xs text-slate-400 mt-1">ด้วย AI Predictive Engine ทำให้ผู้บริหารอนุมัติและปรับกลยุทธ์ได้เร็วขึ้น 85%</p>
+                </div>
+              </div>
+
+              <div class="glass-panel p-5 rounded-2xl flex items-center gap-6 border border-white/10 hover:border-electric-500/40 transition-all">
+                <div class="text-4xl font-black font-mono text-electric-400 min-w-[100px]">-45%</div>
+                <div>
+                  <h4 class="text-lg font-bold text-white">ลดข้อผิดพลาดในกระบวนการทำงาน</h4>
+                  <p class="text-xs text-slate-400 mt-1">ลด Human Error ในการประมวลผลเอกสารและสัญญากฎหมายทางธุรกิจ</p>
+                </div>
+              </div>
+
+              <div class="glass-panel p-5 rounded-2xl flex items-center gap-6 border border-white/10 hover:border-emerald-500/40 transition-all">
+                <div class="text-4xl font-black font-mono text-emerald-400 min-w-[100px]">2.4X</div>
+                <div>
+                  <h4 class="text-lg font-bold text-white">การเติบโตของผลตอบแทนการลงทุน (ROI Growth)</h4>
+                  <p class="text-xs text-slate-400 mt-1">คืนทุนการติดตั้งระบบภายในระยะเวลาเฉลี่ยเพียง 7.5 เดือน</p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+
+      <!-- SLIDE 5: ARCHITECTURE (สถาปัตยกรรมระบบ) -->
+      <section class="slide-deck-item" data-slide-index="4" data-title="05 / AI Architecture">
+        <div class="max-w-6xl mx-auto w-full space-y-8">
+          <div>
+            <span class="text-xs font-semibold tracking-widest text-violet-400 uppercase font-sans">CORE FRAMEWORK</span>
+            <h2 class="text-3xl sm:text-5xl font-extrabold text-white mt-1">สถาปัตยกรรม NEXUS AI Ecosystem</h2>
+            <p class="text-slate-400 font-thai text-sm sm:text-base mt-2">ผสาน 3 เสาหลักเพื่อความปลอดภัย ประสิทธิภาพ และความแม่นยำสูงสุด</p>
+          </div>
+
+          <!-- Architecture Pillars -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 font-thai">
+            
+            <div class="glass-panel p-6 rounded-3xl border border-white/10 hover:border-electric-500/50 transition-all group">
+              <div class="w-12 h-12 rounded-2xl bg-electric-500/10 text-electric-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-database"></i>
+              </div>
+              <span class="text-xs font-mono text-electric-400 font-semibold">LAYER 01</span>
+              <h3 class="text-xl font-bold text-white mt-1">Unified Vector Data Hub</h3>
+              <p class="text-sm text-slate-300 mt-3 leading-relaxed">
+                รวบรวมข้อมูลทุกประเภททั้ง PDF, Database, CRM และ ERP เข้าสู่ Vector Knowledge Graph ป้องกันปัญหาข้อมูลกระจัดกระจาย
+              </p>
+              <ul class="mt-4 space-y-2 text-xs text-slate-400">
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-electric-400"></i> Real-time Sync</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-electric-400"></i> Hybrid RAG Engine</li>
+              </ul>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl border border-violet-500/40 bg-violet-500/5 relative shadow-glow-violet group">
+              <div class="w-12 h-12 rounded-2xl bg-violet-500/20 text-violet-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-robot"></i>
+              </div>
+              <span class="text-xs font-mono text-violet-400 font-semibold">LAYER 02 (CORE)</span>
+              <h3 class="text-xl font-bold text-white mt-1">Autonomous Agent Swarm</h3>
+              <p class="text-sm text-slate-300 mt-3 leading-relaxed">
+                การทำงานร่วมกันของ AI Agents เฉพาะทาง (เช่น Analyst Agent, Validator Agent, Reporter Agent) เพื่อทำงานซับซ้อนโดยอัตโนมัติ
+              </p>
+              <ul class="mt-4 space-y-2 text-xs text-slate-400">
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-400"></i> Multi-agent Orchestration</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-400"></i> Self-Correction Mechanism</li>
+              </ul>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl border border-white/10 hover:border-emerald-500/50 transition-all group">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-shield-halved"></i>
+              </div>
+              <span class="text-xs font-mono text-emerald-400 font-semibold">LAYER 03</span>
+              <h3 class="text-xl font-bold text-white mt-1">Enterprise Guardrails & Security</h3>
+              <p class="text-sm text-slate-300 mt-3 leading-relaxed">
+                ระบบรักษาความปลอดภัยตามมาตรฐานระดับธนาคาร กำหนดสิทธิ์การเข้าถึงข้อมูล ควบคุมความถูกต้อง และป้องกัน Data Leakage 100%
+              </p>
+              <ul class="mt-4 space-y-2 text-xs text-slate-400">
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> ISO27001 & SOC2 Compliant</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> On-Premises Option</li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+
+      <!-- SLIDE 6: DATA & STATISTICS (กราฟข้อมูล) -->
+      <section class="slide-deck-item" data-slide-index="5" data-title="06 / Performance Analytics">
+        <div class="max-w-6xl mx-auto w-full space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <span class="text-xs font-semibold tracking-widest text-electric-400 uppercase font-sans">PERFORMANCE METRICS</span>
+              <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">การเปรียบเทียบประสิทธิภาพการทำงาน</h2>
+            </div>
+            <div class="flex items-center gap-2 font-mono text-xs">
+              <span class="px-3 py-1 rounded-full bg-electric-500/20 text-electric-400 border border-electric-500/40">BEFORE vs AFTER AI</span>
+            </div>
+          </div>
+
+          <!-- Interactive Chart Box -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            
+            <div class="lg:col-span-8 glass-panel p-6 rounded-3xl border border-white/10 relative h-[320px] sm:h-[380px] flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <h3 class="text-sm font-semibold text-white font-thai">อัตราการประมวลผลงานรายไตรมาส (Tasks Processed / Quarter)</h3>
+                <span class="text-xs text-slate-400 font-mono">Unit: Thousands</span>
+              </div>
+              
+              <!-- Chart Canvas Container -->
+              <div class="relative flex-1 w-full h-full mt-4">
+                <canvas id="performanceChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Stats Side Breakdown -->
+            <div class="lg:col-span-4 space-y-4 font-thai">
+              <div class="glass-panel p-5 rounded-2xl border border-electric-500/30">
+                <p class="text-xs text-slate-400">ผลผลิตเพิ่มขึ้น (Productivity Increase)</p>
+                <p class="text-4xl font-black text-electric-400 font-mono mt-1">+240%</p>
+                <p class="text-xs text-slate-300 mt-2">เทียบกับช่วงเวลาเดียวกันในปีที่ผ่านมา</p>
+              </div>
+
+              <div class="glass-panel p-5 rounded-2xl border border-violet-500/30">
+                <p class="text-xs text-slate-400">เวลาที่ประหยัดได้ (Time Saved)</p>
+                <p class="text-4xl font-black text-violet-400 font-mono mt-1">1,450 ชม.</p>
+                <p class="text-xs text-slate-300 mt-2">ต่อพนักงาน 100 คนต่อเดือน</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+
+      <!-- SLIDE 7: STRATEGY & PROCESS (ขั้นตอนการดำเนินงาน) -->
+      <section class="slide-deck-item" data-slide-index="6" data-title="07 / Implementation Flow">
+        <div class="max-w-6xl mx-auto w-full space-y-8">
+          <div>
+            <span class="text-xs font-semibold tracking-widest text-emerald-400 uppercase font-sans">ROADMAP & EXECUTION</span>
+            <h2 class="text-3xl sm:text-5xl font-extrabold text-white mt-1">ขั้นตอนการติดตั้งและเริ่มใช้งาน</h2>
+            <p class="text-slate-400 font-thai text-sm sm:text-base mt-2">แผนการดำเนินงาน 4 ระยะที่ออกแบบเพื่อผลลัพธ์ที่รวดเร็วและปลอดภัย</p>
+          </div>
+
+          <!-- 4-Step Process Timeline -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 font-thai">
+            
+            <div class="glass-panel p-6 rounded-3xl border border-white/10 relative flex flex-col justify-between group hover:border-electric-500/50 transition-all">
+              <div>
+                <div class="w-10 h-10 rounded-full bg-electric-500/20 text-electric-400 font-mono font-bold flex items-center justify-center mb-4">01</div>
+                <h3 class="text-lg font-bold text-white">Audit & Readiness</h3>
+                <p class="text-xs text-slate-300 mt-2 leading-relaxed">ประเมินความพร้อมของคลังข้อมูล กระบวนการทำงาน และกำหนด KPI ที่วัดผลได้จริง</p>
+              </div>
+              <div class="mt-6 text-xs font-mono text-electric-400 font-semibold">MONTH 1-2</div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl border border-white/10 relative flex flex-col justify-between group hover:border-cyan-500/50 transition-all">
+              <div>
+                <div class="w-10 h-10 rounded-full bg-cyan-500/20 text-cyan-400 font-mono font-bold flex items-center justify-center mb-4">02</div>
+                <h3 class="text-lg font-bold text-white">Pilot & Fine-Tuning</h3>
+                <p class="text-xs text-slate-300 mt-2 leading-relaxed">พัฒนา Sandbox Model ทดสอบในแผนกนำร่อง และฝึกฝน AI Agents ด้วยข้อมูลจริง</p>
+              </div>
+              <div class="mt-6 text-xs font-mono text-cyan-400 font-semibold">MONTH 3-4</div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl border border-white/10 relative flex flex-col justify-between group hover:border-violet-500/50 transition-all">
+              <div>
+                <div class="w-10 h-10 rounded-full bg-violet-500/20 text-violet-400 font-mono font-bold flex items-center justify-center mb-4">03</div>
+                <h3 class="text-lg font-bold text-white">Full Enterprise Rollout</h3>
+                <p class="text-xs text-slate-300 mt-2 leading-relaxed">เชื่อมต่อกับระบบ ERP/CRM ทั้งหมด อบรมทีมงาน และเปิดใช้แบบเต็มรูปแบบ</p>
+              </div>
+              <div class="mt-6 text-xs font-mono text-violet-400 font-semibold">MONTH 5-6</div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl border border-white/10 relative flex flex-col justify-between group hover:border-emerald-500/50 transition-all">
+              <div>
+                <div class="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 font-mono font-bold flex items-center justify-center mb-4">04</div>
+                <h3 class="text-lg font-bold text-white">Continuous Optimization</h3>
+                <p class="text-xs text-slate-300 mt-2 leading-relaxed">ประมวลผลการทำงานอย่างต่อเนื่องและปรับปรุงโมเดลอัตโนมัติ (RLHF)</p>
+              </div>
+              <div class="mt-6 text-xs font-mono text-emerald-400 font-semibold">MONTH 7+</div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+
+      <!-- SLIDE 8: BENEFITS & ROI (ประโยชน์และผลลัพธ์) -->
+      <section class="slide-deck-item" data-slide-index="7" data-title="08 / Business Value & ROI">
+        <div class="max-w-6xl mx-auto w-full space-y-8">
+          <div>
+            <span class="text-xs font-semibold tracking-widest text-electric-400 uppercase font-sans">QUANTIFIABLE VALUE</span>
+            <h2 class="text-3xl sm:text-5xl font-extrabold text-white mt-1">ผลตอบแทนทางธุรกิจและคุณค่าระยะยาว</h2>
+            <p class="text-slate-400 font-thai text-sm sm:text-base mt-2">ตัวเลขสรุปความคุ้มค่าที่พิสูจน์ได้จริงจากองค์กรผู้ใช้งาน</p>
+          </div>
+
+          <!-- Highlight Metric Badges -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 font-thai">
+            
+            <div class="glass-panel p-8 rounded-3xl border border-electric-500/40 bg-gradient-to-b from-electric-500/10 to-transparent text-center">
+              <span class="text-xs font-mono text-electric-400 uppercase font-bold">ESTIMATED FIRST YEAR ROI</span>
+              <div class="text-6xl sm:text-7xl font-black font-mono text-electric-400 text-glow my-3">+180%</div>
+              <p class="text-sm text-slate-300">ผลตอบแทนการลงทุนสุทธิภายใน 12 เดือนแรก</p>
+            </div>
+
+            <div class="glass-panel p-8 rounded-3xl border border-violet-500/40 bg-gradient-to-b from-violet-500/10 to-transparent text-center">
+              <span class="text-xs font-mono text-violet-400 uppercase font-bold">SPEED TO MARKET</span>
+              <div class="text-6xl sm:text-7xl font-black font-mono text-violet-400 text-glow-violet my-3">2.5X</div>
+              <p class="text-sm text-slate-300">ออกผลิตภัณฑ์และบริการใหม่ได้เร็วขึ้นกว่าเดิม</p>
+            </div>
+
+            <div class="glass-panel p-8 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/10 to-transparent text-center">
+              <span class="text-xs font-mono text-emerald-400 uppercase font-bold">OPERATIONAL COST REDUCTION</span>
+              <div class="text-6xl sm:text-7xl font-black font-mono text-emerald-400 my-3">-40%</div>
+              <p class="text-sm text-slate-300">ลดค่าใช้จ่ายการดำเนินงานที่ไม่จำเป็นอย่างยั่งยืน</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+
+      <!-- SLIDE 9: CONCLUSION & TAKEAWAYS (สรุปประเด็นสำคัญ) -->
+      <section class="slide-deck-item" data-slide-index="8" data-title="09 / Key Takeaways">
+        <div class="max-w-6xl mx-auto w-full space-y-8">
+          <div>
+            <span class="text-xs font-semibold tracking-widest text-violet-400 uppercase font-sans">SUMMARY & CALL TO ACTION</span>
+            <h2 class="text-3xl sm:text-5xl font-extrabold text-white mt-1">สรุปข้อเสนอแนะ 4 ประการสำหรับผู้บริหาร</h2>
+            <p class="text-slate-400 font-thai text-sm sm:text-base mt-2">แนวทางการเริ่มต้นที่ชัดเจนเพื่อส่งเสริมการเปลี่ยนผ่านเข้าสู่ AI-First Era</p>
+          </div>
+
+          <!-- 4 Takeaway Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 font-thai">
+            
+            <div class="glass-panel p-6 rounded-3xl border border-white/10 flex gap-4 items-start">
+              <div class="w-10 h-10 rounded-2xl bg-electric-500/20 text-electric-400 flex items-center justify-center font-bold text-lg shrink-0">1</div>
+              <div>
+                <h3 class="text-lg font-bold text-white">เริ่มต้นด้วย High-Impact Workflows</h3>
+                <p class="text-sm text-slate-300 mt-1">มุ่งเน้นกระบวนการที่มีคอขวดชัดเจนและเห็นผลลัพธ์รวดเร็ว เพื่อสร้าง Quick Win แก่องค์กร</p>
+              </div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl border border-white/10 flex gap-4 items-start">
+              <div class="w-10 h-10 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-lg shrink-0">2</div>
+              <div>
+                <h3 class="text-lg font-bold text-white">สร้างมาตรฐาน Data Governance</h3>
+                <p class="text-sm text-slate-300 mt-1">จัดระเบียบฐานข้อมูลกลาง กำหนดสิทธิ์ และควบคุมความคุ้มครองข้อมูลส่วนบุคคลอย่างเคร่งครัด</p>
+              </div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl border border-white/10 flex gap-4 items-start">
+              <div class="w-10 h-10 rounded-2xl bg-violet-500/20 text-violet-400 flex items-center justify-center font-bold text-lg shrink-0">3</div>
+              <div>
+                <h3 class="text-lg font-bold text-white">ยกระดับทักษะบุคลากร (Upskilling)</h3>
+                <p class="text-sm text-slate-300 mt-1">ส่งเสริมให้ทีมงานเรียนรู้การทำงานร่วมกับ AI Agents ในฐานะ Co-Pilot ประจำตำแหน่ง</p>
+              </div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl border border-white/10 flex gap-4 items-start">
+              <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-lg shrink-0">4</div>
+              <div>
+                <h3 class="text-lg font-bold text-white">วัดผลสัมฤทธิ์ด้วย KPI ที่วัดได้จริง</h3>
+                <p class="text-sm text-slate-300 mt-1">ประเมินผลลัพธ์ด้วยตัวเลข Cost, Speed และ Accuracy อย่างสม่ำเสมอทุกไตรมาส</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+
+      <!-- SLIDE 10: CLOSING & CONTACT (หน้าปิดท้าย) -->
+      <section class="slide-deck-item" data-slide-index="9" data-title="10 / Thank You & Contact">
+        <div class="max-w-4xl mx-auto w-full text-center space-y-8">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-electric-500/10 border border-electric-500/30 text-electric-400 text-xs font-semibold">
+            <i class="fa-solid fa-sparkles"></i>
+            THANK YOU FOR YOUR TIME
+          </div>
+
+          <h1 class="text-4xl sm:text-6xl md:text-7xl font-black text-white tracking-tight font-thai">
+            "THE FUTURE BELONGS TO <br/>
+            <span class="bg-gradient-to-r from-electric-500 via-cyan-300 to-violet-500 bg-clip-text text-transparent">THE ADAPTIVE"</span>
+          </h1>
+
+          <p class="text-lg text-slate-300 font-thai font-light max-w-xl mx-auto">
+            ขอขอบคุณผู้บริหารและคณะกรรมการทุกท่าน สำหรับเวลาและการรับฟัง <br/>พร้อมเปิดรับคำถามและแลกเปลี่ยนความคิดเห็น
+          </p>
+
+          <!-- Contact Cards Grid -->
+          <div class="pt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 font-thai text-left">
+            <div class="glass-panel p-4 rounded-2xl border border-white/10 flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-electric-500/20 text-electric-400 flex items-center justify-center">
+                <i class="fa-solid fa-envelope"></i>
+              </div>
+              <div class="overflow-hidden">
+                <p class="text-xs text-slate-400">อีเมลติดต่อ</p>
+                <p class="text-sm font-semibold text-white truncate">contact@nexus-ai.io</p>
+              </div>
+            </div>
+
+            <div class="glass-panel p-4 rounded-2xl border border-white/10 flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-violet-500/20 text-violet-400 flex items-center justify-center">
+                <i class="fa-solid fa-globe"></i>
+              </div>
+              <div class="overflow-hidden">
+                <p class="text-xs text-slate-400">เว็บไซต์</p>
+                <p class="text-sm font-semibold text-white truncate">www.nexus-ai.io</p>
+              </div>
+            </div>
+
+            <div class="glass-panel p-4 rounded-2xl border border-white/10 flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                <i class="fa-solid fa-phone"></i>
+              </div>
+              <div class="overflow-hidden">
+                <p class="text-xs text-slate-400">เบอร์โทรศัพท์</p>
+                <p class="text-sm font-semibold text-white truncate">+66 2 123 4567</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ================================================================= -->
+    <!-- FOOTER CONTROLS & PROGRESS INDICATOR                              -->
+    <!-- ================================================================= -->
+    <footer class="relative z-50 h-20 px-6 sm:px-12 flex items-center justify-between border-t border-white/5 bg-obsidian/60 backdrop-blur-xl">
+      
+      <!-- Slide Counter Indicator -->
+      <div class="flex items-center gap-3 font-mono">
+        <span id="slide-current-num" class="text-2xl font-black text-electric-400">01</span>
+        <span class="text-slate-600 font-light">/</span>
+        <span id="slide-total-num" class="text-sm text-slate-400">10</span>
+      </div>
+
+      <!-- Slide Navigation Buttons -->
+      <div class="flex items-center gap-4">
+        <button id="prev-slide-btn" title="สไลด์ก่อนหน้า (Arrow Left)" class="px-5 py-2.5 rounded-xl glass-panel text-xs font-semibold text-slate-200 hover:text-white hover:border-electric-500/50 transition-all flex items-center gap-2 group">
+          <i class="fa-solid fa-chevron-left group-hover:-translate-x-1 transition-transform"></i>
+          <span class="hidden sm:inline">PREV</span>
+        </button>
+
+        <button id="next-slide-btn" title="สไลด์ถัดไป (Arrow Right)" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-electric-500 to-cyan-500 text-obsidian text-xs font-extrabold hover:shadow-glow-cyan transition-all flex items-center gap-2 group">
+          <span class="hidden sm:inline">NEXT SLIDE</span>
+          <i class="fa-solid fa-chevron-right group-hover:translate-x-1 transition-transform"></i>
+        </button>
+      </div>
+
+      <!-- Top Interactive Progress Bar -->
+      <div class="absolute top-0 left-0 w-full h-[2px] bg-white/5">
+        <div id="progress-bar-fill" class="h-full bg-gradient-to-r from-electric-500 via-cyan-400 to-violet-500 w-[10%] transition-all duration-500"></div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ================================================================= -->
+  <!-- OVERVIEW GRID MODAL                                               -->
+  <!-- ================================================================= -->
+  <div id="overview-modal" class="fixed inset-0 z-[8000] bg-obsidian/90 backdrop-blur-2xl hidden flex-col p-6 sm:p-12 overflow-y-auto">
+    <div class="flex items-center justify-between mb-8 max-w-7xl mx-auto w-full">
+      <div>
+        <h2 class="text-2xl font-bold text-white">Presentation Slide Overview</h2>
+        <p class="text-xs text-slate-400 font-thai">คลิกที่สไลด์ใดก็ได้เพื่อข้ามไปยังหน้านั้นโดยทันที</p>
+      </div>
+      <button id="close-overview-btn" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-slate-300 hover:text-white">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+    </div>
+
+    <!-- Grid Container -->
+    <div id="overview-grid-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 max-w-7xl mx-auto w-full">
+      <!-- Dynamic Thumbnails inserted via JS -->
+    </div>
+  </div>
+
+  <!-- ================================================================= -->
+  <!-- SPEAKER NOTES DRAWER                                              -->
+  <!-- ================================================================= -->
+  <div id="speaker-notes-drawer" class="fixed top-24 right-6 z-[7000] w-80 sm:w-96 glass-panel p-6 rounded-3xl border border-white/15 shadow-2xl hidden flex-col space-y-4 font-thai">
+    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+      <div class="flex items-center gap-2 text-xs font-bold text-electric-400 uppercase font-sans">
+        <i class="fa-solid fa-user-tie"></i>
+        <span>SPEAKER NOTES</span>
+      </div>
+      <button id="close-notes-btn" class="text-slate-400 hover:text-white text-xs">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div id="speaker-notes-content" class="text-sm text-slate-300 leading-relaxed max-h-60 overflow-y-auto pr-1">
+      <!-- Speaker note text updated per slide -->
+    </div>
+  </div>
+
+
+  <!-- ================================================================= -->
+  <!-- JAVASCRIPT LOGIC & ENGINE                                         -->
+  <!-- ================================================================= -->
+  <script>
+    /* =================================================================
+       1. DATA & STATE MANAGEMENT
+       ================================================================= */
+    const TOTAL_SLIDES = 10;
+    let currentSlideIndex = 0;
+    let isAudioEnabled = true;
+    let presentationSeconds = 0;
+    let timerInterval = null;
+    let performanceChartInstance = null;
+
+    // Speaker Notes Data
+    const SPEAKER_NOTES = [
+      "สไลด์ 1: ต้อนรับผู้ฟัง เกริ่นนำด้วยชื่อหัวข้อ และเน้นย้ำถึงความสำคัญของ Enterprise AI ในปี 2026",
+      "สไลด์ 2: อธิบาย Agenda 4 หัวข้อหลัก เพื่อให้ผู้ฟังเห็นลำดับขั้นตอนของการนำเสนอ",
+      "สไลด์ 3: เน้นย้ำตัวเลข 72% และ 4.2 ชั่วโมง เพื่อสร้างความตระหนักรู้ถึงปัญหาในปัจจุบัน",
+      "สไลด์ 4: ชี้ให้เห็นโอกาสเติบโต 3.8X จากการใช้งาน Autonomous Agents ในการเร่งประสิทธิภาพ",
+      "สไลด์ 5: อธิบายสถาปัตยกรรม 3 ชั้น (Vector Hub, Agent Swarm, Security Guardrails) ให้ชัดเจน",
+      "สไลด์ 6: นำเสนอชาร์ตเปรียบเทียบ Productivity ชี้จุดที่เพิ่มขึ้น 240% หลังติดตั้งระบบ",
+      "สไลด์ 7: อธิบาย Roadmap 4 ระยะในการทยอยติดตั้งให้เสร็จสมบูรณ์ภายใน 6 เดือน",
+      "สไลด์ 8: เน้นย้ำผลตอบแทน ROI +180% และความคุ้มค่าของการลงทุนแก่ผู้บริหาร",
+      "สไลด์ 9: สรุป 4 คำแนะนำที่ผู้บริหารสามารถนำกลับไปแอ็กชันได้ทันที",
+      "สไลด์ 10: กล่าวขอบคุณ และเปิดเวทีรับคำถาม Q&A"
+    ];
+
+
+    /* =================================================================
+       2. WEB AUDIO API SYNTHESIZER (No external audio files required)
+       ================================================================= */
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playSoundEffect(type) {
+      if (!isAudioEnabled) return;
+      try {
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        if (type === 'slide-change') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
+          gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.15);
+        } else if (type === 'intro-whoosh') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.6);
+          gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.6);
+        }
+      } catch (e) {
+        console.warn('Audio playback error', e);
+      }
+    }
+
+
+    /* =================================================================
+       3. GSAP EPIC CINEMATIC INTRO TIMELINE
+       ================================================================= */
+    let introTL = null;
+
+    function initIntroAnimation() {
+      // Create GSAP Timeline for intro
+      introTL = gsap.timeline({
+        defaults: { ease: "power4.out" },
+        onComplete: finishIntroAndRevealApp
+      });
+
+      // 0.00 - 0.80s: Atmospheric Glow Bloom
+      introTL.to("#intro-glow", {
+        opacity: 1,
+        scale: 1.2,
+        duration: 0.8
+      })
+      .to("#intro-grid", {
+        opacity: 0.4,
+        duration: 0.8
+      }, "-=0.6")
+
+      // 0.80 - 1.50s: Logo Reveal with light sweep
+      .to("#intro-logo", {
+        scale: 1,
+        opacity: 1,
+        filter: "blur(0px)",
+        duration: 0.7
+      }, "-=0.2")
+
+      // 1.50 - 2.40s: Category Metadata text reveal
+      .to("#intro-tag", {
+        y: 0,
+        opacity: 1,
+        duration: 0.7
+      }, "-=0.3")
+
+      // 2.40 - 3.80s: Big Masked Headline Reveal
+      .to("#intro-title-1", {
+        y: 0,
+        opacity: 1,
+        duration: 0.9,
+        ease: "expo.out"
+      }, "-=0.2")
+      .to("#intro-title-2", {
+        y: 0,
+        opacity: 1,
+        duration: 0.9,
+        ease: "expo.out"
+      }, "-=0.7")
+
+      // Subtitle Reveal
+      .to("#intro-subtitle", {
+        y: 0,
+        opacity: 1,
+        duration: 0.8
+      }, "-=0.5")
+
+      // 4.50 - 5.20s: Curtain Transition Reveal into Main Deck
+      .to("#intro-curtain-top", {
+        yPercent: -100,
+        duration: 0.8,
+        ease: "power3.inOut"
+      }, "+=0.3")
+      .to("#intro-curtain-bottom", {
+        yPercent: 100,
+        duration: 0.8,
+        ease: "power3.inOut"
+      }, "<");
+    }
+
+    function finishIntroAndRevealApp() {
+      playSoundEffect('intro-whoosh');
+      const introOverlay = document.getElementById("intro-overlay");
+      const appViewport = document.getElementById("app-viewport");
+
+      gsap.to(introOverlay, {
+        opacity: 0,
+        duration: 0.5,
+        onComplete: () => {
+          introOverlay.style.display = "none";
+        }
+      });
+
+      gsap.to(appViewport, {
+        opacity: 1,
+        duration: 0.6,
+        onComplete: () => {
+          startPresentationTimer();
+          initPerformanceChart();
+          animateCurrentSlideEntrance(0);
+        }
+      });
+    }
+
+    // Skip Intro handler
+    document.getElementById("skip-intro-btn").addEventListener("click", () => {
+      if (introTL) {
+        introTL.progress(1);
+      } else {
+        finishIntroAndRevealApp();
+      }
+    });
+
+    // Replay Intro handler
+    document.getElementById("replay-intro-btn").addEventListener("click", () => {
+      const introOverlay = document.getElementById("intro-overlay");
+      const appViewport = document.getElementById("app-viewport");
+      
+      introOverlay.style.display = "flex";
+      gsap.set(introOverlay, { opacity: 1 });
+      gsap.set(appViewport, { opacity: 0 });
+
+      // Reset intro elements
+      gsap.set("#intro-glow", { opacity: 0, scale: 0.5 });
+      gsap.set("#intro-logo", { opacity: 0, scale: 0.7, filter: "blur(15px)" });
+      gsap.set("#intro-tag", { y: "100%", opacity: 0 });
+      gsap.set("#intro-title-1, #intro-title-2", { y: 120, opacity: 0 });
+      gsap.set("#intro-subtitle", { y: "100%", opacity: 0 });
+      gsap.set("#intro-curtain-top", { yPercent: 0 });
+      gsap.set("#intro-curtain-bottom", { yPercent: 0 });
+
+      initIntroAnimation();
+    });
+
+
+    /* =================================================================
+       4. PRESENTATION ENGINE & SLIDE NAVIGATION
+       ================================================================= */
+    function goToSlide(targetIndex) {
+      if (targetIndex < 0 || targetIndex >= TOTAL_SLIDES || targetIndex === currentSlideIndex) return;
+
+      const slideItems = document.querySelectorAll(".slide-deck-item");
+      const currentSlide = slideItems[currentSlideIndex];
+      const nextSlide = slideItems[targetIndex];
+
+      // Direction logic
+      const isNext = targetIndex > currentSlideIndex;
+
+      playSoundEffect('slide-change');
+
+      // GSAP Slide Out Animation
+      gsap.to(currentSlide, {
+        opacity: 0,
+        scale: 0.95,
+        y: isNext ? -30 : 30,
+        duration: 0.4,
+        ease: "power2.inOut",
+        onComplete: () => {
+          currentSlide.classList.remove("active-slide");
+        }
+      });
+
+      // Prepare next slide
+      nextSlide.classList.add("active-slide");
+      gsap.fromTo(nextSlide, 
+        {
+          opacity: 0,
+          scale: 1.05,
+          y: isNext ? 30 : -30
+        },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power3.out",
+          delay: 0.1,
+          onComplete: () => {
+            currentSlideIndex = targetIndex;
+            updateUIState();
+            animateCurrentSlideEntrance(targetIndex);
+          }
+        }
+      );
+    }
+
+    function animateCurrentSlideEntrance(index) {
+      const activeSlide = document.querySelectorAll(".slide-deck-item")[index];
+      const elementsToAnimate = activeSlide.querySelectorAll("h1, h2, h3, p, .glass-panel, .grid > div");
+
+      gsap.fromTo(elementsToAnimate, 
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, stagger: 0.05, duration: 0.5, ease: "power2.out" }
+      );
+
+      // Trigger Chart animation if Slide 6
+      if (index === 5 && performanceChartInstance) {
+        performanceChartInstance.update();
+      }
+    }
+
+    function updateUIState() {
+      // Update Slide Numbers
+      const formattedNum = String(currentSlideIndex + 1).padStart(2, '0');
+      document.getElementById("slide-current-num").innerText = formattedNum;
+      
+      const slideItems = document.querySelectorAll(".slide-deck-item");
+      const titleAttr = slideItems[currentSlideIndex].getAttribute("data-title");
+      document.getElementById("header-slide-name").innerText = titleAttr;
+
+      // Update Progress Bar Fill
+      const progressPercent = ((currentSlideIndex + 1) / TOTAL_SLIDES) * 100;
+      document.getElementById("progress-bar-fill").style.width = `${progressPercent}%`;
+
+      // Update Speaker Notes
+      document.getElementById("speaker-notes-content").innerText = SPEAKER_NOTES[currentSlideIndex];
+    }
+
+
+    /* =================================================================
+       5. CHART.JS INTERACTIVE DATA VISUALIZATION (SLIDE 6)
+       ================================================================= */
+    function initPerformanceChart() {
+      const ctx = document.getElementById('performanceChart');
+      if (!ctx) return;
+
+      performanceChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025 (AI Introduced)', 'Q1 2026', 'Q2 2026'],
+          datasets: [
+            {
+              label: 'แบบเดิม (Manual Operations)',
+              data: [120, 135, 128, 140, 145, 150],
+              backgroundColor: 'rgba(244, 63, 94, 0.4)',
+              borderColor: 'rgba(244, 63, 94, 0.8)',
+              borderWidth: 1,
+              borderRadius: 6
+            },
+            {
+              label: 'NEXUS Autonomous Agents',
+              data: [120, 135, 128, 290, 420, 510],
+              backgroundColor: 'rgba(0, 240, 255, 0.6)',
+              borderColor: 'rgba(0, 240, 255, 1)',
+              borderWidth: 1,
+              borderRadius: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: '#94A3B8',
+                font: { family: 'Kanit', size: 12 }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { color: '#94A3B8', font: { family: 'Kanit', size: 11 } }
+            },
+            y: {
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { color: '#94A3B8' }
+            }
+          }
+        }
+      });
+    }
+
+
+    /* =================================================================
+       6. OVERVIEW GRID & SPEAKER NOTES MODAL LOGIC
+       ================================================================= */
+    function buildOverviewGrid() {
+      const container = document.getElementById("overview-grid-container");
+      container.innerHTML = "";
+
+      const slideItems = document.querySelectorAll(".slide-deck-item");
+      slideItems.forEach((slide, idx) => {
+        const title = slide.getAttribute("data-title");
+        const card = document.createElement("div");
+        card.className = `glass-panel p-4 rounded-2xl cursor-pointer hover:border-electric-500 transition-all ${idx === currentSlideIndex ? 'border-electric-500 bg-electric-500/10' : 'border-white/10'}`;
+        card.innerHTML = `
+          <div class="text-xs font-mono text-electric-400 font-bold mb-2">SLIDE ${String(idx + 1).padStart(2, '0')}</div>
+          <p class="text-sm font-semibold text-white truncate font-thai">${title}</p>
+        `;
+        card.addEventListener("click", () => {
+          goToSlide(idx);
+          document.getElementById("overview-modal").classList.add("hidden");
+          document.getElementById("overview-modal").classList.remove("flex");
+        });
+        container.appendChild(card);
+      });
+    }
+
+    document.getElementById("overview-grid-btn").addEventListener("click", () => {
+      buildOverviewGrid();
+      const modal = document.getElementById("overview-modal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    });
+
+    document.getElementById("close-overview-btn").addEventListener("click", () => {
+      const modal = document.getElementById("overview-modal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    });
+
+    // Speaker Notes Toggle
+    document.getElementById("speaker-notes-btn").addEventListener("click", () => {
+      const drawer = document.getElementById("speaker-notes-drawer");
+      drawer.classList.toggle("hidden");
+      drawer.classList.toggle("flex");
+    });
+    document.getElementById("close-notes-btn").addEventListener("click", () => {
+      document.getElementById("speaker-notes-drawer").classList.add("hidden");
+    });
+
+    // Audio Toggle
+    document.getElementById("audio-toggle-btn").addEventListener("click", (e) => {
+      isAudioEnabled = !isAudioEnabled;
+      const btn = e.currentTarget;
+      btn.classList.toggle("text-electric-400", isAudioEnabled);
+      btn.classList.toggle("text-rose-400", !isAudioEnabled);
+    });
+
+    // Fullscreen Toggle
+    document.getElementById("fullscreen-btn").addEventListener("click", () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.log(err));
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    });
+
+
+    /* =================================================================
+       7. KEYBOARD & TOUCH NAVIGATION & TIMERS
+       ================================================================= */
+    document.getElementById("prev-slide-btn").addEventListener("click", () => goToSlide(currentSlideIndex - 1));
+    document.getElementById("next-slide-btn").addEventListener("click", () => goToSlide(currentSlideIndex + 1));
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === "Space" || e.key === "PageDown") {
+        goToSlide(currentSlideIndex + 1);
+      } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+        goToSlide(currentSlideIndex - 1);
+      }
+    });
+
+    function startPresentationTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      presentationSeconds = 0;
+      timerInterval = setInterval(() => {
+        presentationSeconds++;
+        const mins = String(Math.floor(presentationSeconds / 60)).padStart(2, '0');
+        const secs = String(presentationSeconds % 60).padStart(2, '0');
+        document.getElementById("presentation-timer").innerText = `${mins}:${secs}`;
+      }, 1000);
+    }
+
+
+    /* =================================================================
+       8. MOUSE PARALLAX & CURSOR FOLLOWER
+       ================================================================= */
+    const cursorDot = document.getElementById("custom-cursor-dot");
+    const cursorRing = document.getElementById("custom-cursor");
+
+    document.addEventListener("mousemove", (e) => {
+      const { clientX: x, clientY: y } = e;
+
+      // Update Cursor
+      if (cursorDot && cursorRing) {
+        cursorDot.style.left = `${x}px`;
+        cursorDot.style.top = `${y}px`;
+        
+        gsap.to(cursorRing, {
+          x: x,
+          y: y,
+          duration: 0.15,
+          ease: "power2.out"
+        });
+      }
+
+      // Ambient Orbs Subtle Parallax Movement
+      const moveX = (x / window.innerWidth - 0.5) * 40;
+      const moveY = (y / window.innerHeight - 0.5) * 40;
+
+      gsap.to("#orb-cyan", { x: moveX, y: moveY, duration: 1.5 });
+      gsap.to("#orb-violet", { x: -moveX, y: -moveY, duration: 1.5 });
+    });
+
+
+    /* =================================================================
+       9. INITIALIZATION ON WINDOW LOAD
+       ================================================================= */
+    window.onload = function () {
+      updateUIState();
+      initIntroAnimation();
+    };
+  </script>
+
+</body>
+</html>
